@@ -2,7 +2,7 @@ GTEST_DIR = googletest/googletest
 GTEST_DEST = build/test
 TESTS_DIR = test/*.cpp
 GTEST_VERSION = 1.11.0
-GTEST_BUILD_FLAGS = -g -isystem ${GTEST_DIR}/include -pthread -I sbt
+GTEST_BUILD_FLAGS = -g -isystem ${GTEST_DIR}/include -pthread -I stb
 
 clean: build/test
 	if [ -d "build" ]; then ( rmdir -rf build ) fi
@@ -35,14 +35,14 @@ build-gtest:
 		make delete-gtest.o \
 	) fi
 
-get-sbt:
-	if [ -d "sbt" ]; then ( rmdir -rf build/sbt ) fi
-	cd buid && git clone git@github.com:nothings/stb.git
+get-stb:
+	if [ ! -d "stb" ]; then ( git clone git@github.com:nothings/stb.git ) fi
 
-build-tests: build-gtest
-	g++ $(GTEST_BUILD_FLAGS) $(TESTS_DIR) $(GTEST_DEST)/libgtest.a -o build/test/test
+build-tests: build-gtest get-stb
+	g++ src/*.cpp $(GTEST_BUILD_FLAGS) $(TESTS_DIR) $(GTEST_DEST)/libgtest.a -o build/test/test.out
 
 run-tests: build-tests
-	@sudo apt-get install valgrind
-	valgrind --leak-check=yes ./build/test/test
+#	@sudo apt-get install valgrind
+#	valgrind --leak-check=yes ./build/test/test
+	./build/test/test.out
 
