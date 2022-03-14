@@ -5,7 +5,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include "io.h"
+#include "image_class.h"
 
 Image::Image(std::string const &name)
 {
@@ -15,6 +15,11 @@ Image::Image(std::string const &name)
     {
         throw std::invalid_argument("File not found");
     }
+}
+
+std::string Image::name()
+{
+    return _name;
 }
 
 unsigned int Image::width()
