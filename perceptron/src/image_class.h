@@ -2,6 +2,10 @@
 #define IO_H
 #include <string>
 
+class Image;
+class Perceptron;
+class Trainer;
+
 class Image
 {
     unsigned char *_image;
@@ -11,10 +15,38 @@ class Image
     public:
         Image(std::string const&);
         std::string name();
-        unsigned int width();
-        unsigned int height();
-        unsigned int channels();
+        unsigned width();
+        unsigned height();
+        unsigned channels();
         unsigned char *image();
+};
+
+class Perceptron
+{
+    friend Trainer;
+
+    public:
+        Perceptron(double *, unsigned, unsigned);
+        double Classify(Image);
+
+    private:
+        double *_weights;
+        unsigned _width;
+        unsigned _height;
+};
+
+class Trainer
+{
+    public:
+        Trainer(Image *, int *, unsigned);
+        void Train(Perceptron &, double);
+    
+    private:
+        Image *_images;
+        int *_classes;
+        unsigned _count;
+        double _learning_rate;
+        void TrainImage(Perceptron &, const int &);
 };
 
 #endif
